@@ -3,7 +3,7 @@
 **Summary**:
 We used the [Capital One API](http://api.reimaginebanking.com) and the [Google Chrome's WebGL Globe](https://www.chromeexperiments.com/globe) in order to visualize the Capital One's data. We used the [Google Maps API](https://developers.google.com/maps/) in order to convert a customer's location from Capital One's API into latitudes and longitudes and used the income of the customer from Capital One's API as the height on the WebGL Globe. 
 
-![]https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/444/785/datas/gallery.jpg
+![alt tag](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/444/785/datas/gallery.jpg)
 
 **Inspiration**:
 Our inspiration for this idea came from the scope of mock Customer data present in Capital One's API. With 50,000 people spread to the ends of the globe, our first thought was "How would this data look if it was plotted globally?". Naturally, we did not want to plot the latitude, longitude, and magnitude (income) of each customer individually, so we created an application that does it for us.
