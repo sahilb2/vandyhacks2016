@@ -1,69 +1,26 @@
-The **WebGL Globe** is an open platform for geographic data visualization created by the Google Data Arts Team. We encourage you to copy the code, add your own data, and create your own globes.
+# VandyHacks Capital One Income Visualization
 
-Check out the examples at http://www.chromeexperiments.com/globe, and if you create a globe, please [share it with us](http://www.chromeexperiments.com/submit). We post our favorite globes publicly.
+**Summary**
+We used the [Capital One API](http://api.reimaginebanking.com) and the [Google Chrome's WebGL Globe](https://www.chromeexperiments.com/globe) in order to visualize the Capital One's data. We used the [Google Maps API](https://developers.google.com/maps/) in order to convert a customer's location from Capital One's API into latitudes and longitudes and used the income of the customer from Capital One's API as the height on the WebGL Globe. 
 
-![](http://4.bp.blogspot.com/-nB6XnTgb4AA/TcLQ4gRBtfI/AAAAAAAAH-U/vb2GuhPN6aM/globe.png)
+**Inspiration**
+Our inspiration for this idea came from the scope of mock Customer data present in Capital One's API. With 50,000 people spread to the ends of the globe, our first thought was "How would this data look if it was plotted globally?". Naturally, we did not want to plot the latitude, longitude, and magnitude (income) of each customer individually, so we created an application that does it for us.
 
-----
+**What it does**
+Income Visualization utilizes the mock Customer data present within Capital One's API and WebGL to create a 3D globe with customer location and income represented visually, with a persons given balance in their account as the data's magnitude. You could apply this method of data visualization to a variety of data sets and represent the data in a variety of different formats.
 
-**The WebGL Globe** supports data in `JSON` format, a sample of which you can find [here](https://github.com/dataarts/webgl-globe/blob/master/globe/population909500.json). `webgl-globe` makes heavy use of the [Three.js library](https://github.com/mrdoob/three.js/).
+**How we built it**
+We first obtained our data from Capital One's Customer API, which returned a customer ID and address information. We then used the ID to map the address to that customer's balance, which was found by the Accounts API. From there, we plugged the address into Google's Geocoding API which returned longitude and latitude data. Once we obtained that, we were able to loop through all accounts to obtain a JSON containing user location and balance data, and fed that into the WebGL 3D globe visualization.
 
-# Data Format
+**Challenges we ran into**
+For the data gathering side of the project, the main challenge was obtaining any significant amount of data from Google's Geocoding API, as there was a requests per second limit, normally around ten. For some reason, our project had an unusually low limit, so even when exceeding two requests per second we got denied further requests, and as a result were not able to obtain all ~57000 addresses. We ended up getting only around 700 people in the Northeast in the end. When it came to plotting the data with WebGL, we came across many problems including the readme not working initially, lack of online support for the project, scaling problems with the magnitude of the data, and the data on the globe not being changed even when replaced with a different JSON. Overall, it took around twelve hours to get everything in order with the globe visualization.
 
-The following illustrates the `JSON` data format that the globe expects:
+**Accomplishments that we're proud of**
+We're proud of linking several different API's together to obtain a solid output, as well as being able to utilize WebGL to give a stylish representation of our data.
 
-```javascript
-var data = [
-    [
-    'seriesA', [ latitude, longitude, magnitude, latitude, longitude, magnitude, ... ]
-    ],
-    [
-    'seriesB', [ latitude, longitude, magnitude, latitude, longitude, magnitude, ... ]
-    ]
-];
-```
+**What we learned**
+How to fully utilize a given API, how WebGL's library can be used for visualization, and how to properly use Google Developer Console. Working around API request limits was also very informative.
 
-# Basic Usage
+**What's next for Income Visualization**
+We are currently working on integrating Income Visualization with Microsoft Face API. The result would be an application that can identify a customer and retrieve their data using only the customer's face.
 
-The following code polls a `JSON` file (formatted like the one above) for geo-data and adds it to an animated, interactive WebGL globe.
-
-```javascript
-// Where to put the globe?
-var container = document.getElementById( 'container' );
-
-// Make the globe
-var globe = new DAT.Globe( container );
-
-// We're going to ask a file for the JSON data.
-var xhr = new XMLHttpRequest();
-
-// Where do we get the data?
-xhr.open( 'GET', 'myjson.json', true );
-
-// What do we do when we have it?
-xhr.onreadystatechange = function() {
-
-    // If we've received the data
-    if ( xhr.readyState === 4 && xhr.status === 200 ) {
-
-        // Parse the JSON
-        var data = JSON.parse( xhr.responseText );
-
-        // Tell the globe about your JSON data
-        for ( var i = 0; i < data.length; i ++ ) {
-            globe.addData( data[i][1], {format: 'magnitude', name: data[i][0]} );
-        }
-
-        // Create the geometry
-        globe.createPoints();
-
-        // Begin animation
-        globe.animate();
-
-    }
-
-};
-
-// Begin request
-xhr.send( null );
-```
